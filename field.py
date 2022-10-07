@@ -21,7 +21,7 @@ class Field():
 
     def _compare(self, field):
         '''
-        Compares two fields to see if they are the same. (Debug only)
+        Compares two fields to see if they have all the same values. (Debug only)
 
             Parameters:
                 field (Field): A field to compare self to
@@ -100,6 +100,15 @@ class Field():
             logging.info(FieldLog.set_col_to.value.format(str(new_key), str(self._plot_type)))
         return new_key
 
+    def get_field_size(self):
+        '''
+        Returns the field size
+
+            Returns:
+                [num_rows, num_cols] (list): tuple of the number of rows and columns
+        '''
+        return [self._num_rows, self._num_cols]
+
     #searches each row for an available plot. 
     def get_next_empty_plot(self):
         '''
@@ -120,6 +129,15 @@ class Field():
                 pass
         logging.error(FieldErrors.next_empty_msg.value)
         return -1
+
+    def get_plot_type(self):
+        '''
+        Returns the plot type of the field
+
+            Returns:
+                plot_type (type): the type of the plot
+        '''
+        return self._plot_type
 
     #gets the plot at the specified coordinates
     def get_plot(self, coords):

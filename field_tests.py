@@ -145,5 +145,9 @@ class Test_Field(unittest.TestCase):
         #TODO test param None vs Coords
         pass
 
+    def test_get_size(self):
+        #TODO implement
+        pass
+
 if __name__ == '__main__':
     unittest.main()

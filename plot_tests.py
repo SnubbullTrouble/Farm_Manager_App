@@ -220,5 +220,9 @@ class Test_Plot(unittest.TestCase):
         p1.clear_plot()  
         self.assertTrue(p1.is_empty() == True)      
 
+    def test_get_field_size(self):
+        #TODO: implement
+        pass
+
 if __name__ == '__main__':
     unittest.main()

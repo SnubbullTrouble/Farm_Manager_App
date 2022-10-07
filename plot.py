@@ -7,6 +7,9 @@ from crop import Reserved
 #one square of a field. essentially a sprinkler and the area it covers
 class Plot(ABC):
     def __init__(self):
+        '''
+        Initializes the plot class
+        '''
         self._num_rows = None
         self._num_cols = None
         self._spaces = {0: {}}
@@ -15,6 +18,17 @@ class Plot(ABC):
 
     #compares two plots returns 0 if equivalent
     def compare(self, plot):
+        '''
+        Compares two plots to see if they have all the same values. (Debug only)
+
+            Parameters:
+                plot (Plot): A field to compare self to
+
+            Returns:
+                result (int):   0 if congruent
+                                -1 if keys are different
+                                -2 if values are different
+        '''
         try:
             #all space keys are in plot
             for row in self._spaces.keys():
@@ -40,6 +54,9 @@ class Plot(ABC):
 
     #empties the plot of all crops. skips initialized reserved spaces
     def clear_plot(self):
+        '''
+        Clears the entire plot of all crop types. Skips reserved spaces.
+        '''
         #for all items in the plot
         for row in self._spaces.keys():
             for col in self._spaces[row].keys():
@@ -55,6 +72,12 @@ class Plot(ABC):
     #clears the crop at the given plot space. throws an error if the space is 
     #an initialized reserve space (no-touchy)
     def clear_space(self, coords):
+        '''
+        Clears the space at the given coordinates.
+
+            Parameters:
+                coords (Coords): Coordinates of the space to clear
+        '''
         #if the space is reserved....
         if type(self.get_space(coords)) == type(Reserved()):
             logging.error(PlotLog.reserve_skipped.value.format(coords.row, coords.col))
@@ -64,13 +87,31 @@ class Plot(ABC):
 
     #creates the dictionary structure that holds all the plot spaces
     def _create_spaces(self):
+        '''
+        Creates the data structure that holds the crop data
+        '''
         for row in range(self._num_rows):
             self._spaces[row] = {}
             for col in range(self._num_cols):
                 self._spaces[row][col] = None
 
+    def get_plot_size(self):
+        '''
+        Returns the plot size
+
+            Returns:
+                [num_rows, num_cols] (list): tuple of the number of rows and columns
+        '''
+        return [self._num_rows, self._num_cols]
+
     #returns row number as a list (starts at 0)
     def get_row(self, row_number):
+        '''
+        Gets the set of spaces of the plot in the specified row
+
+            Parameters:
+                row_number (int): Index of the desired row number
+        '''
         return self._spaces[row_number]
 
     #returns the item in the given space (starts at 0)
