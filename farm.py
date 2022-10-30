@@ -1,20 +1,27 @@
 from dataclasses import field
 import logging
-from resources import Singleton
+from resources import Singleton, Coords
 from field import Field
 from math import floor
 
 class Farm(Singleton):
     def __init__(self):
-        self._fields = {0:Field()}
+        self._fields = {}
         self._crop_sums = {}
 
     def create_field(self, plot_type, num_rows, num_cols):
-        new_key = len(self._fields)
+        '''
+        Creates a field using the given arguments
+
+            Parameters:
+                plot_type (type): type of the plot for the field
+                num_rows (int): number of plot rows in the field
+                num_cols (int): number of plot columns in the field
+        '''
         field = Field(plot_type, num_rows, num_cols)
         self._fields[len(self._fields)] = field
 
-    def get_space_location_from_field_row(self, field, field_row):
+    def get_space_location_from_field_row(self, field_num, field_row):
         '''
         Converts field row into the plot, space location
 
@@ -23,13 +30,14 @@ class Farm(Singleton):
                 field_row (int): the number of the row in the field scope
 
             Return:
-                plot_num, row_num (list<int,int>):  plot_num: index of the plot the space is int
+                plot_row_num, space_row_num (list<int,int>):  plot_num: index of the plot the space is int
                                                     row_num: row_num number of the row in the plot
         '''
-        num_plot_rows = field.get_plot_type().get_plot_size()[0]
-        return [field_row / num_plot_rows, field_row % num_plot_rows]
+        plot_type = self._fields[field_num].get_plot_type()
+        num_plot_rows = plot_type().get_plot_size()[0]
+        return [floor(field_row / num_plot_rows), field_row % num_plot_rows]
 
-    def get_space(self, field, plot_coords, space_coords):
+    def get_space(self, field_num, plot_coords, space_coords):
         '''
         Gets the crop in a single space given the location of the space
 
@@ -41,10 +49,10 @@ class Farm(Singleton):
             Returns:
                 space (Crop): the crop at the given location
         '''
-        return self._fields[field].get_plot(plot_coords).get_space(space_coords)
+        return self._fields[field_num].get_plot(plot_coords).get_space(space_coords)
 
     #sets a single space with a crop field
-    def set_space(self, crop, field, plot_coords, space_coords):
+    def set_space(self, crop, field_num, plot_coords, space_coords):
         '''
         Sets a single space with a crop.
 
@@ -54,9 +62,9 @@ class Farm(Singleton):
                 plot_coords (resources.Coords): The coordinates of the plot in the field
                 space_coords (resources.Coords): The coordinates of the space in the plot
         '''
-        self._fields[field].get_plot(plot_coords).set_space(crop, space_coords)
+        self._fields[field_num].get_plot(plot_coords).set_space(crop, space_coords)
 
-    def set_crop_row(self, crop, field, plot_row, space_row):
+    def set_crop_row(self, crop, field_num, plot_row, space_row):
         '''
         Sets the entire row in a field with a crop.
 
@@ -66,11 +74,9 @@ class Farm(Singleton):
                 plot_row (int): Which row of plots to plant in
                 space_row (int): Which row of spaces to plant in
         '''
-        plots = self._fields[field].get_row(plot_row)
+        plots = self._fields[field_num].get_row(plot_row)
         for plot in plots.values():
             plot.set_row(crop, space_row)
-
-    
 
     def sum_crops(self):
         '''

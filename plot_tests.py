@@ -1,7 +1,5 @@
 from cgitb import small
 import unittest
-
-from numpy import poly1d
 from plot import *
 from testing_resources import TestCrop
 
