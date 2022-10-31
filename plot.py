@@ -100,7 +100,7 @@ class Plot(ABC):
         Returns the plot size
 
             Returns:
-                [num_rows, num_cols] (list): tuple of the number of rows and columns
+                [num_rows, num_cols] (list<int,int>): tuple of the number of rows and columns
         '''
         return [self._num_rows, self._num_cols]
 
@@ -148,6 +148,13 @@ class Plot(ABC):
                 else:
                     pass
         return True
+
+    def set_col(self, crop, col):
+        for row in self._spaces.keys():
+            if type(self.get_space(Coords(row, col))) is not type(Reserved()):
+                self.set_space(crop, Coords(row, col))
+            else:
+                logging.info(PlotLog.space_skipped.value)
 
     #sets each space in the row to crop, skipping reserved spaces
     def set_row(self, crop, row):

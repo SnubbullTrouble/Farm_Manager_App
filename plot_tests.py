@@ -218,9 +218,30 @@ class Test_Plot(unittest.TestCase):
         p1.clear_plot()  
         self.assertTrue(p1.is_empty() == True)      
 
-    def test_get_field_size(self):
-        #TODO: implement
-        pass
+    def test_set_col(self):
+        p1 = SmallPlot()
+        p1.set_col(TestCrop(), 1)
+        self.assertTrue(type(p1.get_space(Coords(0, 0))) == type(Reserved()))
+        self.assertTrue(type(p1.get_space(Coords(0, 1))) == type(TestCrop()))
+        self.assertTrue(type(p1.get_space(Coords(0, 2))) == type(Reserved()))
+        self.assertTrue(type(p1.get_space(Coords(1, 0))) == type(None))
+        self.assertTrue(type(p1.get_space(Coords(1, 1))) == type(Reserved()))
+        self.assertTrue(type(p1.get_space(Coords(1, 2))) == type(None))
+        self.assertTrue(type(p1.get_space(Coords(2, 0))) == type(Reserved()))
+        self.assertTrue(type(p1.get_space(Coords(2, 1))) == type(TestCrop()))
+        self.assertTrue(type(p1.get_space(Coords(2, 2))) == type(Reserved()))
+
+        p1 = MediumPlot()
+        p1.set_col(TestCrop(), 2)
+        self.assertTrue(type(p1.get_space(Coords(0, 0))) == type(None))
+        self.assertTrue(type(p1.get_space(Coords(0, 1))) == type(None))
+        self.assertTrue(type(p1.get_space(Coords(0, 2))) == type(TestCrop()))
+        self.assertTrue(type(p1.get_space(Coords(1, 0))) == type(None))
+        self.assertTrue(type(p1.get_space(Coords(1, 1))) == type(Reserved()))
+        self.assertTrue(type(p1.get_space(Coords(1, 2))) == type(TestCrop()))
+        self.assertTrue(type(p1.get_space(Coords(2, 0))) == type(None))
+        self.assertTrue(type(p1.get_space(Coords(2, 1))) == type(None))
+        self.assertTrue(type(p1.get_space(Coords(2, 2))) == type(TestCrop()))
 
 if __name__ == '__main__':
     unittest.main()

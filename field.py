@@ -105,7 +105,7 @@ class Field():
         Returns the field size
 
             Returns:
-                [num_rows, num_cols] (list): tuple of the number of rows and columns
+                [num_rows, num_cols] (list<int,int>): tuple of the number of rows and columns
         '''
         return [self._num_rows, self._num_cols]
 
