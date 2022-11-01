@@ -88,7 +88,7 @@ class Plot(ABC):
     #creates the dictionary structure that holds all the plot spaces
     def _create_spaces(self):
         '''
-        Creates the data structure that holds the crop data
+        Creates the data structure that holds the crop data.
         '''
         for row in range(self._num_rows):
             self._spaces[row] = {}
@@ -107,7 +107,7 @@ class Plot(ABC):
     #returns row number as a list (starts at 0)
     def get_row(self, row_number):
         '''
-        Gets the set of spaces of the plot in the specified row
+        Gets the set of spaces of the plot in the specified row.
 
             Parameters:
                 row_number (int): Index of the desired row number
@@ -116,15 +116,36 @@ class Plot(ABC):
 
     #returns the item in the given space (starts at 0)
     def get_space(self, coords):
+        '''
+        Gets the space at the specified plot coordinates.
+
+            Parameters:
+                coords (Coords): coordinates of the space
+
+            Returs:
+                crop (Crop): crop at the specificed location
+        '''
         return self._spaces[coords.row][coords.col]
         
     #places a reserved "crop" in each reserved location
     def _initialize_reserved_spaces(self):
+        '''
+        Initializes reserved spaces in the plot.
+        '''
         for coord in self._reserved_spaces:
             self.set_space(Reserved(), Coords(coord.row, coord.col))
 
     #checks if a space an initialized reserved space
     def is_default_reserved(self, coords):
+        '''
+        Checks whether the space at the specified coordinates is reserved.
+
+            Parameters:
+                coords (Coords): coordinates of the space
+
+            Returns:
+                isReserved (bool): True if reserved, False if not
+        '''
         for coord in self._reserved_spaces:
             if coord.compare(coords):
                 return True
@@ -132,6 +153,16 @@ class Plot(ABC):
 
     #returns boolean based on if all spaces in the plot are None
     def is_empty(self, skip_reserved = True):
+        '''
+        Checks to see whether any crops are in the plot. The plot is empty if 
+        all spaces are None. Ignores reserved spaces by default.
+
+            Parameters:
+                skip_reserved (bool): sets the flag to skip reserved spaces (True by default)
+
+            Returs:
+                isEmpty (bool): True if empty, False if non-empty
+        '''
         for row in self._spaces:
             for col in self._spaces[row].keys():
                 if self._spaces[row][col] is not None:
@@ -150,6 +181,13 @@ class Plot(ABC):
         return True
 
     def set_col(self, crop, col):
+        '''
+        Sets each space of a column with the specified crop.
+
+            Parameters:
+                crop (Crop): crop to place in each space
+                col (int): column to plant in
+        '''
         for row in self._spaces.keys():
             if type(self.get_space(Coords(row, col))) is not type(Reserved()):
                 self.set_space(crop, Coords(row, col))
@@ -158,6 +196,13 @@ class Plot(ABC):
 
     #sets each space in the row to crop, skipping reserved spaces
     def set_row(self, crop, row):
+        '''
+        Sets each space of a row with the specified crop.
+
+            Parameters:
+                crop (Crop): crop to place in each space
+                row (int): row to plant in
+        '''
         for space in self._spaces[row].keys():
             if type(self.get_space(Coords(row, space))) is not type(Reserved()):
                 self.set_space(crop, Coords(row, space))
@@ -166,6 +211,13 @@ class Plot(ABC):
 
     #puts a crop in the given space (starts at 0) if the space is not reserved
     def set_space(self, crop, coords):
+        '''
+        Sets the space at the coordinates to the specified crop.
+
+            Paramters:
+                crop (Crop): crop to place at the coordinates
+                coords (Coords): coordinates of the space
+        '''
         if type(self.get_space(coords)) != type(Reserved()):
             self._spaces[coords.row][coords.col] = crop
             logging.info(PlotLog.space_set.value.format(str(type(crop)), coords.row, coords.col))

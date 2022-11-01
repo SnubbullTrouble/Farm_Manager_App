@@ -57,7 +57,7 @@ class Field():
     #creates the plot using the number of rows and columns
     def _create_plots(self, plot_type):
         '''
-        Creates all the plots in the field based on field size
+        Creates all the plots in the field based on field size.
 
         Parameters:
             plot_type (type): The type of Plot for the field
@@ -71,7 +71,7 @@ class Field():
     #adds a column to each row
     def add_column(self):
         '''
-        Adds a column to the field (One more plot for each row)
+        Adds a column to the field by adding ne more plot for each row.
 
             Returns:
                 new_key (int): The new column key
@@ -86,7 +86,7 @@ class Field():
     #adds new row
     def add_row(self):
         '''
-        Adds a row to the field
+        Adds a row to the field.
 
             Returns:
                 new_key (int): The new row key
@@ -102,7 +102,7 @@ class Field():
 
     def get_field_size(self):
         '''
-        Returns the field size
+        Returns the field size.
 
             Returns:
                 [num_rows, num_cols] (list<int,int>): tuple of the number of rows and columns
@@ -112,7 +112,7 @@ class Field():
     #searches each row for an available plot. 
     def get_next_empty_plot(self):
         '''
-        Gets the coordinates of the next empty plot
+        Gets the coordinates of the next empty plot.
 
             Returns:
                 coords (Coords):    Row, Column of the next empty plot
@@ -132,7 +132,7 @@ class Field():
 
     def get_plot_type(self):
         '''
-        Returns the plot type of the field
+        Returns the plot type of the field.
 
             Returns:
                 plot_type (type): the type of the plot
@@ -142,7 +142,7 @@ class Field():
     #gets the plot at the specified coordinates
     def get_plot(self, coords):
         '''
-        Returns the plot at the provided coordinates
+        Returns the plot at the provided coordinates.
 
             Parameters:
                 coords (Coords): Row, Col of the desired plot
@@ -155,7 +155,7 @@ class Field():
     #gets all the plots in a row
     def get_row(self, row):
         '''
-        Returns the row of plots from row number
+        Returns the row of plots from row number.
 
             Parameters:
                 row (int): Row number
@@ -169,7 +169,7 @@ class Field():
     #next available plot
     def _set_plot(self, plot, coords = None):
         '''
-        Sets the plot at the provided coordinates (Debug Only)
+        Sets the plot at the provided coordinates. (Debug Only)
 
             Parameters:
                 plot (Plot): Plot to be used

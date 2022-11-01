@@ -10,7 +10,7 @@ class Farm(Singleton):
 
     def create_field(self, plot_type, num_rows, num_cols):
         '''
-        Creates a field using the given arguments
+        Creates a field using the given arguments.
 
             Parameters:
                 plot_type (type): type of the plot for the field
@@ -22,7 +22,7 @@ class Farm(Singleton):
 
     def get_space_col_from_field_col(self, field_num, field_col):
         '''
-        Converts field col into the plot col, space col
+        Converts field col into the plot col, space col.
 
             Parameters: 
                 field_num (int): field number
@@ -38,7 +38,7 @@ class Farm(Singleton):
 
     def get_space_location_from_field_location(self, field_num, field_coords):
         '''
-        Gets the exact plot location, space location of the space in the field
+        Gets the exact plot location, space location of the space in the field.
 
             Parameters:
                 field_num (int): field number
@@ -54,7 +54,7 @@ class Farm(Singleton):
 
     def get_space_row_from_field_row(self, field_num, field_row):
         '''
-        Converts field row into the plot row, space row
+        Converts field row into the plot row, space row.
 
             Parameters: 
                 field_num (int): field number
@@ -70,7 +70,7 @@ class Farm(Singleton):
 
     def get_space(self, field_num, field_coords):
         '''
-        Gets the crop in a single space given the location of the space
+        Gets the crop in a single space given the location of the space.
 
             Parameters:
                 field_num (int): The index of the field in self._fields
@@ -128,7 +128,10 @@ class Farm(Singleton):
 
     def sum_crops(self):
         '''
-        Sums up the type of each crop in the field
+        Sums up the type of each crop in the field.
+
+            Returns:
+                crop_sums (dict): dictionary of each crop count with the crops as keys
         '''
         crop_sums = {}
         #field
