@@ -90,6 +90,7 @@ class Plot(ABC):
         '''
         Creates the data structure that holds the crop data.
         '''
+        logging.info(PlotLog.creating_plot.value)
         for row in range(self._num_rows):
             self._spaces[row] = {}
             for col in range(self._num_cols):

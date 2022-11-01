@@ -26,6 +26,7 @@ class FieldErrors(Enum):
         maximum number of rows in the field to add a new column."""
 
 class FieldLog(Enum):
+    creating_field = "Creating new field."
     new_row_added = "Created a new row. Row number:"
     next_empty_found = "Found next empty plot at: Row {0}, Col {1}"
     next_empty_is = "Next Empty plot is at: Row {0}, Col {1}"
@@ -33,6 +34,7 @@ class FieldLog(Enum):
     new_col_added = "Created a new column. Col number:"
     plot_cleared = "Plot spaces cleared"
     set_col_to = "Set column Col:{0} to {1}"
+    set_plot = "Setting plot to {0}"
 
 class GeneralMessages(Enum):
     no_data_provided = "<No data provided>"
@@ -42,6 +44,7 @@ class PlotErrors(Enum):
     space_data_error = "Invalid number of items in space Row {0}, Col {1}"
 
 class PlotLog(Enum):
+    creating_plot = "Creating new plot."
     space_cleared = "Space at Row {0}, Col {1} cleared."
     space_set = "{0} space set at Row {1}, Col {2}"
     space_skipped = "Space at Row {0}, Col {1} skipped."

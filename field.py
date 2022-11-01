@@ -63,9 +63,11 @@ class Field():
             plot_type (type): The type of Plot for the field
         '''
         self._plots = {}
+        logging.info(FieldLog.creating_field.value)
         for row in range(self._num_rows):
             self._plots[row] = {}
             for col in range(self._num_cols):
+                logging.info(FieldLog.new_plot_added.value.format(str(type(plot_type()))))
                 self._plots[row][col] = plot_type()
 
     #adds a column to each row
@@ -180,12 +182,12 @@ class Field():
             next_avail = self.get_next_empty_plot()
             if next_avail != -1:
                 self._plots[next_avail.row][next_avail.col] = plot
-                logging.info(FieldLog.new_plot_added.value.format(str(type(plot)), 
+                logging.info(FieldLog.set_plot.value.format(str(type(plot)), 
                     next_avail.row, next_avail.col))
             else:
                 pass
         else:
             self._plots[coords.row][coords.col] = plot
-            logging.info(FieldLog.new_plot_added.value.format(str(type(plot)), 
+            logging.info(FieldLog.set_plot.value.format(str(type(plot)), 
                coords.row, coords.col))
 
