@@ -1,6 +1,7 @@
 from dataclasses import field
 import logging
 from resources import Singleton, Coords
+from crop import Crop
 from field import Field
 from math import floor
 
@@ -8,7 +9,7 @@ class Farm(Singleton):
     def __init__(self):
         self._fields = {}
 
-    def create_field(self, plot_type, num_rows, num_cols):
+    def create_field(self, plot_type: type, num_rows: int, num_cols: int) -> None:
         '''
         Creates a field using the given arguments.
 
@@ -20,7 +21,7 @@ class Farm(Singleton):
         field = Field(plot_type, num_rows, num_cols)
         self._fields[len(self._fields)] = field
 
-    def get_space_col_from_field_col(self, field_num, field_col):
+    def get_space_col_from_field_col(self, field_num: int, field_col: int) -> tuple:
         '''
         Converts field col into the plot col, space col.
 
@@ -29,14 +30,16 @@ class Farm(Singleton):
                 field_col (int): the number of the col in the field scope
 
             Returns:
-                [plot_col, space_col] (list<int,int>):  plot_col: index of the plot the space is int
-                                                        space_col: col_num number of the col in the plot
+                [plot_col, space_col] (list<int,int>):  plot_col: index of \
+                    the plot the space is int
+                                                        space_col: col_num \
+                    number of the col in the plot
         '''
         plot_type = self._fields[field_num].get_plot_type()
         num_plot_cols = plot_type().get_plot_size()[1]
         return [floor(field_col / num_plot_cols), field_col % num_plot_cols]
 
-    def get_space_location_from_field_location(self, field_num, field_coords):
+    def get_space_location_from_field_location(self, field_num: int, field_coords: Coords) -> tuple:
         '''
         Gets the exact plot location, space location of the space in the field.
 
@@ -52,7 +55,7 @@ class Farm(Singleton):
         col_dat = self.get_space_col_from_field_col(field_num, field_coords.col)
         return [Coords(row_dat[0], col_dat[0]), Coords(row_dat[1], col_dat[1])]
 
-    def get_space_row_from_field_row(self, field_num, field_row):
+    def get_space_row_from_field_row(self, field_num: int, field_row: int) -> tuple:
         '''
         Converts field row into the plot row, space row.
 
@@ -68,7 +71,7 @@ class Farm(Singleton):
         num_plot_rows = plot_type().get_plot_size()[0]
         return [floor(field_row / num_plot_rows), field_row % num_plot_rows]
 
-    def get_space(self, field_num, field_coords):
+    def get_space(self, field_num: int, field_coords: Coords) -> Crop:
         '''
         Gets the crop in a single space given the location of the space.
 
@@ -84,7 +87,7 @@ class Farm(Singleton):
         return self._fields[field_num].get_plot(plot_coords).get_space(space_coords)
 
     #sets a single space with a crop field
-    def set_space(self, crop, field_num, field_coords):
+    def set_space(self, crop: Crop, field_num: int, field_coords: Coords) -> None:
         '''
         Sets a single space with a crop.
 
@@ -97,7 +100,7 @@ class Farm(Singleton):
         plot_coords, space_coords = coords[0], coords[1]
         self._fields[field_num].get_plot(plot_coords).set_space(crop, space_coords)
 
-    def set_crop_col(self, crop, field_num, field_col):
+    def set_crop_col(self, crop: Crop, field_num: int, field_col:int) -> None:
         '''
         Sets the entire column in a field with crop.
 
@@ -111,7 +114,7 @@ class Farm(Singleton):
         for row in range(self._fields[field_num].get_field_size()[0]):
             self._fields[field_num].get_plot(Coords(row, plot_col)).set_col(crop, space_col)
 
-    def set_crop_row(self, crop, field_num, field_row):
+    def set_crop_row(self, crop: Crop, field_num: int, field_row: int) -> None:
         '''
         Sets the entire row in a field with a crop.
 
@@ -126,7 +129,7 @@ class Farm(Singleton):
         for plot in plots.values():
             plot.set_row(crop, space_row)
 
-    def sum_crops(self):
+    def sum_crops(self) -> dict:
         '''
         Sums up the type of each crop in the field.
 

@@ -7,27 +7,27 @@ class Test_Plot(unittest.TestCase):
     
     def test_compare(self):
         p1, p2 = SmallPlot(), SmallPlot()
-        self.assertTrue(p1.compare(p2) == 0)
+        self.assertTrue(p1.compare(p2._spaces) == 0)
 
         p1, p2 = MediumPlot(), MediumPlot()
-        self.assertTrue(p1.compare(p2) == 0)
+        self.assertTrue(p1.compare(p2._spaces) == 0)
 
         p1, p2 = LargePlot(), LargePlot()
-        self.assertTrue(p1.compare(p2) == 0)
+        self.assertTrue(p1.compare(p2._spaces) == 0)
 
         p1, p2 = SmallPlot(), MediumPlot()
-        self.assertTrue(p1.compare(p2) == -2)
+        self.assertTrue(p1.compare(p2._spaces) == -2)
 
         p1, p2 = SmallPlot(), LargePlot()
-        self.assertTrue(p1.compare(p2) == -2)
+        self.assertTrue(p1.compare(p2._spaces) == -2)
 
         p1, p2 = MediumPlot(), LargePlot()
-        self.assertTrue(p1.compare(p2) == -2)
+        self.assertTrue(p1.compare(p2._spaces) == -2)
 
         p1, p2 = SmallPlot(), SmallPlot()
-        self.assertTrue(p1.compare(p2) == 0)
+        self.assertTrue(p1.compare(p2._spaces) == 0)
         p1.set_space(TestCrop(), Coords(0, 1))
-        self.assertFalse(p1.compare(p2) == 0)
+        self.assertFalse(p1.compare(p2._spaces) == 0)
 
     def test_set_space(self):
         p1 = SmallPlot()
@@ -79,35 +79,35 @@ class Test_Plot(unittest.TestCase):
     def test_instantiation(self):
         p1, p2 = SmallPlot(), SmallPlot()
         self.assertFalse(p1 == p2)
-        self.assertTrue(p1.compare(p2) == 0)
+        self.assertTrue(p1.compare(p2._spaces) == 0)
         p3 = SmallPlot()
         p3._spaces = {0: {0: Reserved(), 1: None, 2: Reserved()},
                     1: {0: None, 1: Reserved(), 2: None},
                     2: {0: Reserved(), 1: None, 2: Reserved()}}
-        self.assertTrue(p1.compare(p3) == 0)
-        self.assertTrue(p2.compare(p3) == 0)
+        self.assertTrue(p1.compare(p3._spaces) == 0)
+        self.assertTrue(p2.compare(p3._spaces) == 0)
 
         p1, p2 = MediumPlot(), MediumPlot()
         self.assertFalse(p1 == p2)
-        self.assertTrue(p1.compare(p2) == 0)
+        self.assertTrue(p1.compare(p2._spaces) == 0)
         p3 = MediumPlot()
         p3._spaces = {0: {0: None, 1: None, 2: None,},
                     1: {0: None, 1: Reserved(), 2:None},
                     2: {0: None, 1: None, 2: None}}
-        self.assertTrue(p1.compare(p3) == 0)
-        self.assertTrue(p2.compare(p3) == 0)
+        self.assertTrue(p1.compare(p3._spaces) == 0)
+        self.assertTrue(p2.compare(p3._spaces) == 0)
 
         p1, p2 = LargePlot(), LargePlot()
         self.assertFalse(p1 == p2)
-        self.assertTrue(p1.compare(p2) == 0)
+        self.assertTrue(p1.compare(p2._spaces) == 0)
         p3 = LargePlot()
         p3._spaces = {0: {0: None, 1: None, 2: None, 3: None, 4: None},
                     1: {0: None, 1: None, 2: None, 3: None, 4: None},
                     2: {0: None, 1: None, 2: Reserved(), 3: None, 4: None},
                     3: {0: None, 1: None, 2: None, 3: None, 4: None},
                     4: {0: None, 1: None, 2: None, 3: None, 4: None}}
-        self.assertTrue(p1.compare(p3) == 0)
-        self.assertTrue(p2.compare(p3) == 0)
+        self.assertTrue(p1.compare(p3._spaces) == 0)
+        self.assertTrue(p2.compare(p3._spaces) == 0)
 
     def test_is_empty(self):
         p1 = SmallPlot()

@@ -1,8 +1,4 @@
-from dataclasses import field
 import unittest
-
-from pkg_resources import get_platform
-
 from field import Field
 from plot import *
 from testing_resources import TestCrop, TestField
@@ -12,57 +8,57 @@ class Test_Field(unittest.TestCase):
     def test_compare(self):
         field1, field2 = (Field(type(SmallPlot()), 3, 3), 
             Field(type(SmallPlot()), 3, 3))
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = (Field(type(SmallPlot()), 3, 3), 
             Field(type(MediumPlot()), 3, 3))
-        self.assertTrue(field1._compare(field2) == -2)
+        self.assertTrue(field1._compare(field2._plots) == -2)
 
         field1, field2 = (Field(type(LargePlot()), 3, 3), 
             Field(type(LargePlot()), 3, 3))
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = (Field(type(LargePlot()), 3, 3), 
             Field(type(MediumPlot()), 3, 3))
-        self.assertTrue(field1._compare(field2) == -2)
+        self.assertTrue(field1._compare(field2._plots) == -2)
 
         field1, field2 = (Field(type(MediumPlot()), 5, 5), 
             Field(type(MediumPlot()), 3, 3))
-        self.assertTrue(field1._compare(field2) == -1)
+        self.assertTrue(field1._compare(field2._plots) == -1)
 
         field1, field2 = (Field(type(MediumPlot()), 5, 2), 
             Field(type(MediumPlot()), 2, 5))
-        self.assertTrue(field1._compare(field2) == -1)
+        self.assertTrue(field1._compare(field2._plots) == -1)
 
     def test_instantiation(self):
         field1, field2 = Field(type(SmallPlot()), 3, 3), TestField()
         field2._plots = {0: {0: SmallPlot(), 1: SmallPlot(), 2: SmallPlot()},
                 1: {0: SmallPlot(), 1: SmallPlot(), 2: SmallPlot()},
                 2: {0: SmallPlot(), 1: SmallPlot(), 2: SmallPlot()}}
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = Field(type(MediumPlot()), 3, 3), TestField()
         field2._plots = {0: {0: MediumPlot(), 1: MediumPlot(), 2: MediumPlot()},
                 1: {0: MediumPlot(), 1: MediumPlot(), 2: MediumPlot()},
                 2: {0: MediumPlot(), 1: MediumPlot(), 2: MediumPlot()}}
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = Field(type(MediumPlot()), 1, 1), TestField()
         field2._plots = {0: {0: MediumPlot()}}
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
         
         field1, field2 = Field(type(LargePlot()), 1, 3), TestField()
         field2._plots = {0: {0: LargePlot(), 1: LargePlot(), 2: LargePlot()}}
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = Field(type(MediumPlot()), 2, 1), TestField()
         field2._plots = {0: {0: MediumPlot()},
                 1: {0: MediumPlot()}}
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
     def test_get_plot(self):
         field1 = Field(type(SmallPlot()), 1, 2)
-        self.assertTrue(field1.get_plot(Coords(0,1)).compare(field1._plots[0][1]) == 0)
+        self.assertTrue(field1.get_plot(Coords(0,1)).compare(field1._plots[0][1]._spaces) == 0)
         self.assertTrue(field1.get_plot(Coords(0, 1)) == field1.get_plot(Coords(0, 1)))
         self.assertFalse(field1.get_plot(Coords(0, 1)) == field1.get_plot(Coords(0, 0)))
 
@@ -73,7 +69,7 @@ class Test_Field(unittest.TestCase):
                 2: {0: SmallPlot(), 1: SmallPlot()}}
         field1.add_row()
         self.assertTrue(field1._num_rows == 3)
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = Field(type(MediumPlot()), 2, 3), TestField()
         field2._plots = {0: {0: MediumPlot(), 1: MediumPlot(), 2: MediumPlot()},
@@ -81,14 +77,14 @@ class Test_Field(unittest.TestCase):
                 2: {0: MediumPlot(), 1: MediumPlot(), 2: MediumPlot()}}
         field1.add_row()
         self.assertTrue(field1._num_rows == 3)
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = Field(type(LargePlot()), 1, 1), TestField()
         field2._plots = {0: {0: LargePlot()},
                 1: {0: LargePlot()}}
         field1.add_row()
         self.assertTrue(field1._num_rows == 2)
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
     def test_add_column(self):
         field1, field2 = Field(type(SmallPlot()), 2, 2), TestField()
@@ -96,20 +92,20 @@ class Test_Field(unittest.TestCase):
                 1: {0: SmallPlot(), 1: SmallPlot(), 2: SmallPlot()}}
         field1.add_column()
         self.assertTrue(field1._num_cols == 3)
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = Field(type(MediumPlot()), 2, 3), TestField()
         field2._plots = {0: {0: MediumPlot(), 1: MediumPlot(), 2: MediumPlot(), 3: MediumPlot()},
                 1: {0: MediumPlot(), 1: MediumPlot(), 2: MediumPlot(), 3: MediumPlot()}}
         field1.add_column()
         self.assertTrue(field1._num_cols == 4)
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
         field1, field2 = Field(type(LargePlot()), 1, 1), TestField()
         field2._plots = {0: {0: LargePlot(), 1: LargePlot()}}
         field1.add_column()
         self.assertTrue(field1._num_cols == 2)
-        self.assertTrue(field1._compare(field2) == 0)
+        self.assertTrue(field1._compare(field2._plots) == 0)
 
     def test_next_empty(self):
         field1 = Field(type(SmallPlot()), 1, 3)

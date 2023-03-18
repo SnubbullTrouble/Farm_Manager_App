@@ -4,7 +4,7 @@ from plot import *
 
 #collection of plots
 class Field():
-    def __init__(self, plot_type, num_rows, num_cols):
+    def __init__(self, plot_type: type, num_rows: int, num_cols: int) -> None:
         '''
         Initializes the Field class.
 
@@ -19,7 +19,7 @@ class Field():
         self._plot_type = plot_type
         self._create_plots(self._plot_type)
 
-    def _compare(self, field):
+    def _compare(self, field_plots: dict) -> int:
         '''
         Compares two fields to see if they have all the same values. (Debug only)
 
@@ -34,19 +34,19 @@ class Field():
         try:
             #all plot keys are in field
             for row in self._plots.keys():
-                col = field._plots[row]
+                col = field_plots[row]
                 #all plot col keys are in the field col
                 for key in self._plots[row]:
                     val = col[key]
                     if type(val) != type(self._plots[row][key]):
                         raise ValueError
             #all field keys are in plots
-            for row in field._plots.keys():
+            for row in field_plots.keys():
                 col = self._plots[row]
                 #all field col keys are in the plot col
-                for key in field._plots[row]:
+                for key in field_plots[row]:
                     val = col[key]
-                    if type(val) != type(field._plots[row][key]):
+                    if type(val) != type(field_plots[row][key]):
                         raise ValueError
             return 0
         except KeyError:
@@ -55,7 +55,7 @@ class Field():
             return -2
 
     #creates the plot using the number of rows and columns
-    def _create_plots(self, plot_type):
+    def _create_plots(self, plot_type: type) -> None:
         '''
         Creates all the plots in the field based on field size.
 
@@ -67,11 +67,11 @@ class Field():
         for row in range(self._num_rows):
             self._plots[row] = {}
             for col in range(self._num_cols):
-                logging.info(FieldLog.new_plot_added.value.format(str(type(plot_type()))))
+                logging.info(FieldLog.new_plot_added.value.format(str(type(plot_type())), str(row), str(col)))
                 self._plots[row][col] = plot_type()
 
     #adds a column to each row
-    def add_column(self):
+    def add_column(self) -> int:
         '''
         Adds a column to the field by adding ne more plot for each row.
 
@@ -86,7 +86,7 @@ class Field():
         return new_key
 
     #adds new row
-    def add_row(self):
+    def add_row(self) -> int:
         '''
         Adds a row to the field.
 
@@ -102,7 +102,7 @@ class Field():
             logging.info(FieldLog.set_col_to.value.format(str(new_key), str(self._plot_type)))
         return new_key
 
-    def get_field_size(self):
+    def get_field_size(self) -> tuple:
         '''
         Returns the field size.
 
@@ -112,7 +112,7 @@ class Field():
         return [self._num_rows, self._num_cols]
 
     #searches each row for an available plot. 
-    def get_next_empty_plot(self):
+    def get_next_empty_plot(self) -> Coords | int:
         '''
         Gets the coordinates of the next empty plot.
 
@@ -132,7 +132,7 @@ class Field():
         logging.error(FieldErrors.next_empty_msg.value)
         return -1
 
-    def get_plot_type(self):
+    def get_plot_type(self) -> type:
         '''
         Returns the plot type of the field.
 
@@ -142,7 +142,7 @@ class Field():
         return self._plot_type
 
     #gets the plot at the specified coordinates
-    def get_plot(self, coords):
+    def get_plot(self, coords: Coords) -> Plot:
         '''
         Returns the plot at the provided coordinates.
 
@@ -155,7 +155,7 @@ class Field():
         return self._plots[coords.row][coords.col]
 
     #gets all the plots in a row
-    def get_row(self, row):
+    def get_row(self, row: int) -> dict:
         '''
         Returns the row of plots from row number.
 
@@ -169,7 +169,7 @@ class Field():
 
     #sets the plot at the location provided, if coords not provided, place at the 
     #next available plot
-    def _set_plot(self, plot, coords = None):
+    def _set_plot(self, plot: Plot, coords: Coords = None) -> None:
         '''
         Sets the plot at the provided coordinates. (Debug Only)
 

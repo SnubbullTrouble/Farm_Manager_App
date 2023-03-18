@@ -1,0 +1,4 @@
+uniform line endings
+reformat hints/comment blocks using \chars instead of tabs and spaces
+evaluate _get_plot_type's usefulness next to type()
+investigate logging in the farm module

@@ -2,11 +2,11 @@ from abc import ABC
 import logging
 from resources import Coords, PlotLog, PlotErrors
 from farm_exceptions import DataException, PlotException
-from crop import Reserved
+from crop import Crop, Reserved
 
 #one square of a field. essentially a sprinkler and the area it covers
 class Plot(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         '''
         Initializes the plot class
         '''
@@ -17,7 +17,7 @@ class Plot(ABC):
         self.empty = True
 
     #compares two plots returns 0 if equivalent
-    def compare(self, plot):
+    def compare(self, plot_spaces: dict) -> int:
         '''
         Compares two plots to see if they have all the same values. (Debug only)
 
@@ -25,26 +25,26 @@ class Plot(ABC):
                 plot (Plot): A field to compare self to
 
             Returns:
-                result (int):   0 if congruent
-                                -1 if keys are different
+                result (int):   0 if congruent\n
+                                -1 if keys are different\n
                                 -2 if values are different
         '''
         try:
             #all space keys are in plot
             for row in self._spaces.keys():
-                col = plot._spaces[row]
+                col = plot_spaces[row]
                 #all space col keys are in the plot col
                 for key in self._spaces[row]:
                     val = col[key]
                     if type(val) != type(self._spaces[row][key]):
                         raise ValueError
             #all plot keys are in space
-            for row in plot._spaces.keys():
+            for row in plot_spaces.keys():
                 col = self._spaces[row]
                 #all plot col keys are in the space col
-                for key in plot._spaces[row]:
+                for key in plot_spaces[row]:
                     val = col[key]
-                    if type(val) != type(plot._spaces[row][key]):
+                    if type(val) != type(plot_spaces[row][key]):
                         raise ValueError
             return 0
         except KeyError:
@@ -53,7 +53,7 @@ class Plot(ABC):
             return -2
 
     #empties the plot of all crops. skips initialized reserved spaces
-    def clear_plot(self):
+    def clear_plot(self) -> None:
         '''
         Clears the entire plot of all crop types. Skips reserved spaces.
         '''
@@ -71,7 +71,7 @@ class Plot(ABC):
 
     #clears the crop at the given plot space. throws an error if the space is 
     #an initialized reserve space (no-touchy)
-    def clear_space(self, coords):
+    def clear_space(self, coords: Coords) -> None:
         '''
         Clears the space at the given coordinates.
 
@@ -86,7 +86,7 @@ class Plot(ABC):
             self.set_space(None, coords)
 
     #creates the dictionary structure that holds all the plot spaces
-    def _create_spaces(self):
+    def _create_spaces(self) -> None:
         '''
         Creates the data structure that holds the crop data.
         '''
@@ -96,7 +96,7 @@ class Plot(ABC):
             for col in range(self._num_cols):
                 self._spaces[row][col] = None
 
-    def get_plot_size(self):
+    def get_plot_size(self) -> list:
         '''
         Returns the plot size
 
@@ -106,30 +106,33 @@ class Plot(ABC):
         return [self._num_rows, self._num_cols]
 
     #returns row number as a list (starts at 0)
-    def get_row(self, row_number):
+    def get_row(self, row_number: int) -> dict:
         '''
         Gets the set of spaces of the plot in the specified row.
 
             Parameters:
                 row_number (int): Index of the desired row number
+
+            Returns:
+                row (dict): The row of crops at the given row number
         '''
         return self._spaces[row_number]
 
     #returns the item in the given space (starts at 0)
-    def get_space(self, coords):
+    def get_space(self, coords: Coords) -> Crop:
         '''
         Gets the space at the specified plot coordinates.
 
             Parameters:
                 coords (Coords): coordinates of the space
 
-            Returs:
+            Returns:
                 crop (Crop): crop at the specificed location
         '''
         return self._spaces[coords.row][coords.col]
         
     #places a reserved "crop" in each reserved location
-    def _initialize_reserved_spaces(self):
+    def _initialize_reserved_spaces(self) -> None:
         '''
         Initializes reserved spaces in the plot.
         '''
@@ -137,7 +140,7 @@ class Plot(ABC):
             self.set_space(Reserved(), Coords(coord.row, coord.col))
 
     #checks if a space an initialized reserved space
-    def is_default_reserved(self, coords):
+    def is_default_reserved(self, coords: Coords) -> bool:
         '''
         Checks whether the space at the specified coordinates is reserved.
 
@@ -153,7 +156,7 @@ class Plot(ABC):
         return False
 
     #returns boolean based on if all spaces in the plot are None
-    def is_empty(self, skip_reserved = True):
+    def is_empty(self, skip_reserved: bool = True) -> bool:
         '''
         Checks to see whether any crops are in the plot. The plot is empty if 
         all spaces are None. Ignores reserved spaces by default.
@@ -161,7 +164,7 @@ class Plot(ABC):
             Parameters:
                 skip_reserved (bool): sets the flag to skip reserved spaces (True by default)
 
-            Returs:
+            Returns:
                 isEmpty (bool): True if empty, False if non-empty
         '''
         for row in self._spaces:
@@ -181,7 +184,7 @@ class Plot(ABC):
                     pass
         return True
 
-    def set_col(self, crop, col):
+    def set_col(self, crop: Crop, col: int) -> None:
         '''
         Sets each space of a column with the specified crop.
 
@@ -196,7 +199,7 @@ class Plot(ABC):
                 logging.info(PlotLog.space_skipped.value)
 
     #sets each space in the row to crop, skipping reserved spaces
-    def set_row(self, crop, row):
+    def set_row(self, crop: Crop, row: int) -> None:
         '''
         Sets each space of a row with the specified crop.
 
@@ -211,7 +214,7 @@ class Plot(ABC):
                 logging.info(PlotLog.space_skipped.value)
 
     #puts a crop in the given space (starts at 0) if the space is not reserved
-    def set_space(self, crop, coords):
+    def set_space(self, crop: Crop, coords: Coords) -> None:
         '''
         Sets the space at the coordinates to the specified crop.
 
@@ -230,7 +233,7 @@ class Plot(ABC):
 
 #5x5 plots (24 empty spaces)
 class LargePlot(Plot):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._num_rows = 5
         self._num_cols = 5
@@ -241,7 +244,7 @@ class LargePlot(Plot):
 
 #3x3 plots (8 empty spaces)
 class MediumPlot(Plot):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._num_rows = 3
         self._num_cols = 3
@@ -252,7 +255,7 @@ class MediumPlot(Plot):
 
 #3x3 plots (4 empty spaces)
 class SmallPlot(Plot):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._num_rows = 3
         self._num_cols = 3
@@ -261,5 +264,4 @@ class SmallPlot(Plot):
             Coords(1, 1), Coords(2, 0), Coords(2, 2)]
         self._create_spaces()
         self._initialize_reserved_spaces()
-
 
